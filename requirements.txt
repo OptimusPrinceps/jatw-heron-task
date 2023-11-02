@@ -1,4 +1,7 @@
-pandas
-Flask==2.2.2
+pandas==2.1.2
+Flask==3.0.0
+flask_cors==3.0.10
+werkzeug
 pytest
 pytest-mock
+requests==2.31.0
