@@ -2,11 +2,24 @@ import json
 
 import pandas as pd
 from flask import Blueprint, jsonify, request, Response
+from werkzeug.datastructures import FileStorage
 
 from Skeleton.exceptions import ApiUserException
-from Skeleton.fileparser import FileParser
 
-task_api = Blueprint('task_api', __name__)
+upload_api = Blueprint('upload_api', __name__)
+
+
+def parse_file(file: FileStorage) -> pd.DataFrame:
+    if file.filename.endswith('.csv'):
+        df = pd.read_csv(file)
+    elif file.filename.endswith('.xlsx'):
+        df = pd.read_excel(file)
+    elif file.filename.endswith('.json'):
+        df = pd.read_json(file)
+    else:
+        raise ApiUserException('Unsupported file type.')
+
+    return df
 
 
 class PostUploadApiMapper:
@@ -17,7 +30,7 @@ class PostUploadApiMapper:
             df = pd.read_json(json_data)
         elif request.content_type.startswith('multipart/form-data'):
             file = request.files['file']
-            df = FileParser.parse_file(file)
+            df = parse_file(file)
         else:
             raise ApiUserException("Unsupported Media Type.")
 
@@ -31,7 +44,7 @@ class PostUploadApiMapper:
         return jsonify(data)
 
 
-@task_api.route('/upload', methods=['POST'])
+@upload_api.route('/', methods=['POST'])
 def upload():
     df = PostUploadApiMapper.map_request()
 

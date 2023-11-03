@@ -40,12 +40,12 @@
 
     if (fileInput.files[0]) {
         formData.append('file', fileInput.files[0]);
-        response = await fetch('/api/task/upload', {
+        response = await fetch('/api/upload', {
             method: 'POST',
             body: formData
         });
     } else {
-        response = await fetch('/api/task/upload', {
+        response = await fetch('/api/upload', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

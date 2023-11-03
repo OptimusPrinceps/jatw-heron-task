@@ -1,2 +1,2 @@
 class ApiRoutes:
-    TASK_API = 'task'
+    UPLOAD_API = 'upload'
