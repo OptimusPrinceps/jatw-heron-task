@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heron Data Task</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+</head>
+<body>
+
+<h1>Heron Data Take Home Task</h1>
+
+<h2>Upload File (CSV, PDF, JSON, Excel) or Input JSON Directly</h2>
+<form enctype="multipart/form-data" action="" method="post" id="uploadForm">
+    <input type="file" name="file" id="file"
+           accept=".csv, application/pdf, application/json, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+    <textarea id="jsonInput" placeholder="Or paste your JSON data here..."></textarea>
+    <button type="button" onclick="uploadAndProcess()">Submit</button>
+</form>
+
+
+<h3>Preview:</h3>
+<pre id="preview"></pre>
+<div id="data-container"></div>
+
+
+<script>
+    async function uploadAndProcess() {
+    const fileInput = document.getElementById('file');
+    const jsonInput = document.getElementById('jsonInput');
+
+    if (!fileInput.files[0] && !jsonInput.value) {
+        document.getElementById('preview').textContent = 'Error: Please upload a file or input JSON data.';
+        return;
+    }
+
+    let response;
+    const formData = new FormData();
+
+    if (fileInput.files[0]) {
+        formData.append('file', fileInput.files[0]);
+        response = await fetch('/api/task/upload', {
+            method: 'POST',
+            body: formData
+        });
+    } else {
+        response = await fetch('/api/task/upload', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ jsonData: jsonInput.value })
+        });
+    }
+
+    try {
+        if (response.ok) {
+            const data = await response.json();
+            renderTable(data);
+        } else {
+            document.getElementById('preview').textContent = 'Error: ' + response.statusText;
+        }
+    } catch (error) {
+        document.getElementById('preview').textContent = 'Error: ' + error.toString();
+    }
+}
+
+function renderTable(data) {
+    const table = document.createElement('table');
+    const thead = document.createElement('thead');
+    const tbody = document.createElement('tbody');
+
+    // Headers
+    const headerRow = document.createElement('tr');
+    Object.keys(data[0]).forEach(key => {
+        const th = document.createElement('th');
+        th.textContent = key;
+        headerRow.appendChild(th);
+    });
+    thead.appendChild(headerRow);
+    table.appendChild(thead);
+
+    // Data rows
+    data.forEach(row => {
+        const tr = document.createElement('tr');
+        Object.values(row).forEach(val => {
+            const td = document.createElement('td');
+            td.textContent = val;
+            tr.appendChild(td);
+        });
+        tbody.appendChild(tr);
+    });
+    table.appendChild(tbody);
+
+    // Append the table to a container in your HTML
+    const container = document.getElementById('data-container');
+    container.innerHTML = ''; // Clear previous data
+    container.appendChild(table);
+}
+
+
+</script>
+
+</body>
+<footer>
+    <div class="footer-content">
+        <p>Josh Atwal 2023</p>
+        <ul>
+            <li><a href="https://josh-atwal.com" target="_blank">My website</a></li>
+            <li><a href="https://github.com/OptimusPrinceps/jatw-heron-task" target="_blank">View repo on GitHub</a>
+            </li>
+            <li><a href="https://www.youtube.com/watch?v=XMCVCJ8ZuPs" target="_blank">(Background ambiance)</a></li>
+        </ul>
+    </div>
+</footer>
+
+</html>
