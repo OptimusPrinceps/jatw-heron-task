@@ -11,10 +11,10 @@
 
 <h1>Heron Data Take Home Task</h1>
 
-<h2>Upload File (CSV, PDF, JSON, Excel) or Input JSON Directly</h2>
+<h2>Upload File (CSV, JSON, Excel) or Input JSON Directly</h2>
 <form enctype="multipart/form-data" action="" method="post" id="uploadForm">
     <input type="file" name="file" id="file"
-           accept=".csv, application/pdf, application/json, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+           accept=".csv, application/json, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
     <textarea id="jsonInput" placeholder="Or paste your JSON data here..."></textarea>
     <button type="button" onclick="uploadAndProcess()">Submit</button>
 </form>
