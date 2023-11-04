@@ -4,6 +4,7 @@ import time
 from datetime import datetime, timedelta
 from random import sample, randint
 
+from Skeleton.constants import get_data_dir
 from Skeleton.transaction import Transaction
 
 
@@ -73,5 +74,5 @@ if __name__ == "__main__":
     transactions = [TransactionFactory.create_transaction() for _ in range(n)]
     transaction_dicts = [t.to_dict() for t in transactions]
     df = pd.DataFrame.from_records(transaction_dicts)
-    df.to_csv('../../data/mydata.csv', index=False)
+    df.to_csv(get_data_dir() + '/mydata.csv', index=False)
     print(df)

@@ -4,6 +4,7 @@ import pandas as pd
 from flask import Blueprint, jsonify, request, Response
 from werkzeug.datastructures import FileStorage
 
+from Skeleton.constants import get_data_dir
 from Skeleton.exceptions import ApiUserException
 
 upload_api = Blueprint('upload_api', __name__)
@@ -55,6 +56,6 @@ class PostUploadApiMapper:
 def upload():
     df = PostUploadApiMapper.map_request()
 
-    df.to_csv('../Data/upload.csv', index=False)
+    df.to_csv(get_data_dir() + '/upload.csv', index=False)
 
     return PostUploadApiMapper.map_response(df)
