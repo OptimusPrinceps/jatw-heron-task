@@ -14,8 +14,7 @@ pip install -r requirements.txt
 python app/main.py
 
 # Run tests (optional)
-cd app
-python -m pytest
+./run_pytest.sh
 ```
 
 A webpage should automatically open in your browser. Please
