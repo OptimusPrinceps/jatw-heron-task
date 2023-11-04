@@ -13,10 +13,13 @@ pip install -r requirements.txt
 # Run application
 python app/main.py
 
-# Run tests
+# Run tests (optional)
 cd app
+python -m pytest
 ```
 
 A webpage should automatically open in your browser. Please
-[click here](http://127.0.0.1:5000) if not. Note that you will have to accept the security warning as I have manually
-generated an SSL certificate for localhost.
+[click here](http://127.0.0.1:5000) if not.
+
+Just submit your data and then hit process.
+

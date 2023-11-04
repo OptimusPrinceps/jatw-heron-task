@@ -22,15 +22,23 @@ def parse_file(file: FileStorage) -> pd.DataFrame:
     return df
 
 
+def parse_json(json_data: dict or str) -> pd.DataFrame:
+    if isinstance(json_data, str):
+        json_data: dict = json.loads(json_data)
+    if 'transactions' in json_data:
+        json_data = json_data['transactions']
+
+    df = pd.DataFrame.from_dict(json_data)
+    return df
+
+
 class PostUploadApiMapper:
     @classmethod
     def map_request(cls) -> pd.DataFrame:
         if request.content_type == 'application/json':
-            json_data = request.json
-            df = pd.read_json(json_data)
+            df = parse_json(request.json)
         elif request.content_type.startswith('multipart/form-data'):
-            file = request.files['file']
-            df = parse_file(file)
+            df = parse_file(request.files['file'])
         else:
             raise ApiUserException("Unsupported Media Type.")
 
@@ -39,9 +47,8 @@ class PostUploadApiMapper:
     @classmethod
     def map_response(cls, df: pd.DataFrame) -> Response:
         df_sample = df.head(5)
-        json_data = df_sample.to_json(orient='records')
-        data = json.loads(json_data)
-        return jsonify(data)
+        df_dict = df_sample.to_dict(orient='records')
+        return jsonify(df_dict)
 
 
 @upload_api.route('/', methods=['POST'])

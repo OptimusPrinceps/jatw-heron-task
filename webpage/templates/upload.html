@@ -16,17 +16,19 @@
     <input type="file" name="file" id="file"
            accept=".csv, application/json, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
     <textarea id="jsonInput" placeholder="Or paste your JSON data here..."></textarea>
-    <button type="button" onclick="uploadAndProcess()">Submit</button>
+    <button class="button1" type="button" onclick="uploadAndProcess()">Submit</button>
 </form>
 
 
-<h3>Preview:</h3>
-<pre id="preview"></pre>
+<h3 id="preview"></h3>
 <div id="data-container"></div>
+</br>
+<div id="process" class="center-container"></div>
+<div id="success" class="center-container"></div>
 
 
 <script>
-    async function uploadAndProcess() {
+async function uploadAndProcess() {
     const fileInput = document.getElementById('file');
     const jsonInput = document.getElementById('jsonInput');
 
@@ -40,17 +42,17 @@
 
     if (fileInput.files[0]) {
         formData.append('file', fileInput.files[0]);
-        response = await fetch('/api/upload', {
+        response = await fetch('/api/upload/', {
             method: 'POST',
             body: formData
         });
     } else {
-        response = await fetch('/api/upload', {
+        response = await fetch('/api/upload/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ jsonData: jsonInput.value })
+            body: JSON.stringify(jsonInput.value)
         });
     }
 
@@ -58,6 +60,7 @@
         if (response.ok) {
             const data = await response.json();
             renderTable(data);
+            renderProcessButton();
         } else {
             document.getElementById('preview').textContent = 'Error: ' + response.statusText;
         }
@@ -67,6 +70,10 @@
 }
 
 function renderTable(data) {
+    const previewh3 = document.getElementById('preview');
+    previewh3.innerHTML = ''; // Clear previous data
+    previewh3.textContent = 'Preview:';
+
     const table = document.createElement('table');
     const thead = document.createElement('thead');
     const tbody = document.createElement('tbody');
@@ -99,10 +106,29 @@ function renderTable(data) {
     container.appendChild(table);
 }
 
+function renderProcessButton() {
+    const processButton = document.createElement('button');
+    processButton.className = 'button2';
+    processButton.textContent = 'Process';
+    processButton.onclick = process;
+    document.getElementById('process').appendChild(processButton);
+}
+
+function process() {
+    const container = document.getElementById('success');
+    container.innerHTML = ''; // Clear previous data
+
+    response = fetch('/api/process/', {
+            method: 'POST'
+    });
+    container.textContent = 'Success.';
+
+}
 
 </script>
 
 </body>
+</br>
 <footer>
     <div class="footer-content">
         <p>Josh Atwal 2023</p>
