@@ -108,7 +108,7 @@ def _identify_recurring_transactions(df: pd.DataFrame) -> list[tuple[list, float
         if len(filtered_df) == 1:
             # This is only necessary while bad candidates are generated (no recurring set will only have one transaction in it)
             continue
-        
+
         interval_confidence = _IntervalModel.compute_confidence(filtered_df['date'])
         amount_confidence = _AmountModel.compute_confidence(filtered_df['amount'])
 
@@ -127,3 +127,9 @@ def identify_recurring_transactions(df: pd.DataFrame) -> list[tuple[list, float]
 
     return recurring_transactions_with_probability
 
+
+def test_heron_data_task():
+    df = pd.read_csv(get_data_dir() + '/upload.csv')
+    df = identify_recurring_transactions(df)
+    # TODO: write a reproduceable test here
+    assert len(df) > 1
