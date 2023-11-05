@@ -12,13 +12,12 @@ class PostProcessApiMapper:
         pass
 
     @classmethod
-    def map_response(cls, df: pd.DataFrame) -> Response:
-        df_dict = df.to_dict(orient='records')
-        return jsonify(df_dict)
+    def map_response(cls, transactions) -> Response:
+        return jsonify(transactions)
 
 
 @process_api.route('/', methods=['POST'])
 def process():
     input_df = pd.read_csv('../data/upload.csv')
-    df = identify_recurring_transactions(input_df)
-    return PostProcessApiMapper.map_response(df)
+    transactions = identify_recurring_transactions(input_df)
+    return PostProcessApiMapper.map_response(transactions)
