@@ -69,9 +69,23 @@ the description, but additional sophistication could be added to this later on b
 ## Implementation
 
 See the function `identify_recurring_transactions()` in file `app/ML/task.py` for a starter implementation of the above
-approach.
+approach. My function first identifies candidate sets of recurring transactions, and then uses models to determine
+probabilities that the set is recurring based on the intervals and the amounts using an ensemble model. It finally
+outputs a list of predicted recurring transaction sets with an associated probability.
 
 I have chosen to use a pandas dataframe as the default interface for the data. This ensures a unified data format and
 makes it easy to manipulate the data. The data is parsed at the API layer into a dataframe and stored as a CSV.
 The API layer also contains an interface for mapping a dataframe back into JSON for display on the frontend.
 
+## Further work / limitations
+
+Asides from some of the functions not yet being implemented, there is much room for improvement.
+
+- The candidate generation method should not generate sets of transactions where there are only one (or perhaps few)
+  transactions
+- The candidate generation should combine its outputs so that the same set is not generated twice (take the higher
+  probability for duplicates)
+- The ensemble model could use more features instead of just purely the confidences of the intermediary models. It also
+  needs training obviously but there is plenty of scope here to build a powerful predicting model.
+- The candidate generation model could use hyperparameter tweaking
+- I'm going to stop writing as I've run out of time
