@@ -2,6 +2,8 @@
 
 #### 2023-11-06
 
+This repo is a Flask server that takes transaction data and identifies groups of recurring transactions. 
+
 ## Usage
 
 ```bash
