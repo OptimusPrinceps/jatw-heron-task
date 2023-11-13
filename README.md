@@ -90,4 +90,4 @@ Asides from some of the functions not yet being implemented, there is much room 
 - The ensemble model could use more features instead of just purely the confidences of the intermediary models. It also
   needs training obviously but there is plenty of scope here to build a powerful predicting model.
 - The candidate generation model could use hyperparameter tweaking
-- I'm going to stop writing as I've run out of time
+
